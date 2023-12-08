@@ -6,7 +6,7 @@ Create and manage [Vault Enterprise Secret Sync](https://developer.hashicorp.com
 - All the vault secret associations must be removed before the secret sync destination can be removed. Vault will return this error message if secret associations still exist: `store cannot be deleted because it is still managing secrets`.
 
 ## Usage
-Create Vault Secret Sync destination and association:
+Create Vault Secret Sync destination and secret association:
 ```terraform
 module "vault_secretsync" {
   source  = "SPHTech-Platform/vault-enterprise-secret-sync"
@@ -35,17 +35,15 @@ module "vault_secretsync" {
 
   name = "vault-ss"
 
+  # Removing secret in this section does not remove the secret association
   associate_secrets = {
     foo = {
       mount       = "mount_foo"
       secret_name = "foo_secret"
     }
-    hello = {
-      mount       = "mount_hello"
-      secret_name = "hello_secret"
-    }
   }
 
+  # Add the secret information here to remove the secret association
   unassociate_secrets = {
     hello = {
       mount       = "mount_hello"
@@ -75,11 +73,10 @@ module "vault_secretsync" {
   }
 
   delete_all_secret_associations = true
-  delete_sync_destination	     = true
 }
 ```
 
-Remove vault secret sync destination:
+Remove vault secret sync destination (all secret associations must be removed before this can be done):
 ```terraform
 module "vault_secretsync" {
   source  = "SPHTech-Platform/vault-enterprise-secret-sync"
@@ -99,6 +96,7 @@ module "vault_secretsync" {
   }
 
   delete_all_secret_associations = true
+  delete_sync_destination        = true
 ```
 
 <!-- BEGIN_TF_DOCS -->
