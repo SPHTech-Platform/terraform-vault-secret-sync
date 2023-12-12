@@ -85,7 +85,7 @@ module "vault_secretsync" {
 }
 ```
 
-Remove vault secret sync destination by adding `delete_sync_destination = true` (NOTE: all secret associations must be removed before this can be done):
+Remove vault secret sync destination by adding `delete_sync_destination = true` (NOTE: all secret associations must be removed before this can be done i.e. `delete_all_secret_associations = true`):
 ```terraform
 module "vault_secretsync" {
   source  = "SPHTech-Platform/vault-enterprise-secret-sync"
