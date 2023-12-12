@@ -17,11 +17,11 @@ module "vault_secretsync" {
   associate_secrets = {
     foo = {
       mount       = "mount_foo"
-      secret_name = "foo_secret"
+      secret_name = ["foo_secret"]
     }
     hello = {
       mount       = "mount_hello"
-      secret_name = "hello_secret"
+      secret_name = ["hello_secret"]
     }
   }
 }
@@ -39,7 +39,7 @@ module "vault_secretsync" {
   associate_secrets = {
     foo = {
       mount       = "mount_foo"
-      secret_name = "foo_secret"
+      secret_name = ["foo_secret"]
     }
   }
 
@@ -47,7 +47,7 @@ module "vault_secretsync" {
   unassociate_secrets = {
     hello = {
       mount       = "mount_hello"
-      secret_name = "hello_secret"
+      secret_name = ["hello_secret"]
     }
   }
 }
@@ -64,11 +64,11 @@ module "vault_secretsync" {
   associate_secrets = {
     foo = {
       mount       = "mount_foo"
-      secret_name = "foo_secret"
+      secret_name = ["foo_secret"]
     }
     hello = {
       mount       = "mount_hello"
-      secret_name = "hello_secret"
+      secret_name = ["hello_secret"]
     }
   }
 
@@ -87,11 +87,11 @@ module "vault_secretsync" {
   associate_secrets = {
     foo = {
       mount       = "mount_foo"
-      secret_name = "foo_secret"
+      secret_name = ["foo_secret"]
     }
     hello = {
       mount       = "mount_hello"
-      secret_name = "hello_secret"
+      secret_name = ["hello_secret"]
     }
   }
 
