@@ -74,7 +74,10 @@ module "vault_secretsync" {
     }
     hello = {
       mount       = "mount_hello"
-      secret_name = ["hello_secret"]
+      secret_name = [
+        "hello_secret_1",
+        "hello_secret_2",
+      ]
     }
   }
 
