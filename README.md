@@ -9,8 +9,8 @@ Create and manage [Vault Enterprise Secret Sync](https://developer.hashicorp.com
 Create Vault Secret Sync destination and secret association:
 ```terraform
 module "vault_secretsync" {
-  source  = "SPHTech-Platform/vault-enterprise-secret-sync"
-  version = "0.1.0"
+  source  = "SPHTech-Platform/secret-sync/vault"
+  version = "~> 0.1.0"
 
   name = "vault-ss"
 
@@ -33,8 +33,8 @@ module "vault_secretsync" {
 Remove some vault secrets from association by adding the attribute `unassociate_secrets`:
 ```terraform
 module "vault_secretsync" {
-  source  = "SPHTech-Platform/vault-enterprise-secret-sync"
-  version = "0.1.0"
+  source  = "SPHTech-Platform/secret-sync/vault"
+  version = "~> 0.1.0"
 
   name = "vault-ss"
 
@@ -62,8 +62,8 @@ module "vault_secretsync" {
 Remove all vault secrets from association by adding the attribute `delete_all_secret_associations = true`:
 ```terraform
 module "vault_secretsync" {
-  source  = "SPHTech-Platform/vault-enterprise-secret-sync"
-  version = "0.1.0"
+  source  = "SPHTech-Platform/secret-sync/vault"
+  version = "~> 0.1.0"
 
   name = "vault-ss"
 
@@ -88,8 +88,8 @@ module "vault_secretsync" {
 Remove vault secret sync destination by adding `delete_sync_destination = true` (NOTE: all secret associations must be removed before this can be done i.e. `delete_all_secret_associations = true`):
 ```terraform
 module "vault_secretsync" {
-  source  = "SPHTech-Platform/vault-enterprise-secret-sync"
-  version = "0.1.0"
+  source  = "SPHTech-Platform/secret-sync/vault"
+  version = "~> 0.1.0"
 
   name = "vault-ss"
 
