@@ -30,7 +30,7 @@ module "vault_secretsync" {
 }
 ```
 
-Remove some vault secrets from association:
+Remove some vault secrets from association by adding the attribute `unassociate_secrets`:
 ```terraform
 module "vault_secretsync" {
   source  = "SPHTech-Platform/vault-enterprise-secret-sync"
@@ -59,7 +59,7 @@ module "vault_secretsync" {
 }
 ```
 
-Remove all vault secrets from association:
+Remove all vault secrets from association by adding the attribute `delete_all_secret_associations = true`:
 ```terraform
 module "vault_secretsync" {
   source  = "SPHTech-Platform/vault-enterprise-secret-sync"
