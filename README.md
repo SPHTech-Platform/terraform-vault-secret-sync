@@ -118,7 +118,9 @@ module "vault_secretsync" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.67.0 |
+| <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.2.2 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9.0 |
 | <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 3.23.0 |
 
 ## Providers
@@ -146,7 +148,7 @@ module "vault_secretsync" {
 | [null_resource.rotate_access_key](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_rotating.iam_user_secretsync_access_key](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/rotating) | resource |
-| [time_sleep.wait_5_seconds](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [time_sleep.wait_for_destination_sync](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [vault_generic_endpoint.create_association_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
 | [vault_generic_endpoint.create_destination_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
 | [vault_generic_endpoint.remove_all_association_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
