@@ -1,5 +1,6 @@
 locals {
-  age_in_days             = timeadd(timestamp(), "-2160h") # 90 days (90*24 hours)
+  # age_in_days             = timeadd(timestamp(), "-2160h") # 90 days (90*24 hours)
+  age_in_days             = timeadd(plantimestamp(), "-1056h") # 44 days (44*24 hours)
   sync_base_path          = "sys/sync/destinations"
   destination_name        = "${var.name}-${var.region}-${random_id.this.hex}"
   delete_sync_destination = alltrue([var.delete_all_secret_associations, var.delete_sync_destination])
