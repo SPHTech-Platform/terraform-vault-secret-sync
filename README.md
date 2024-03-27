@@ -30,87 +30,6 @@ module "vault_secretsync" {
 }
 ```
 
-Remove some vault secrets from association by adding the attribute `unassociate_secrets`:
-```terraform
-module "vault_secretsync" {
-  source  = "SPHTech-Platform/secret-sync/vault"
-  version = "~> 0.1.0"
-
-  name = "vault-ss"
-
-  # Removing secret in this section does not remove the secret association
-  associate_secrets = {
-    foo = {
-      mount       = "mount_foo"
-      secret_name = ["foo_secret"]
-    }
-  }
-
-  # Add the secret information here to remove the secret association
-  unassociate_secrets = {
-    hello = {
-      mount       = "mount_hello"
-      secret_name = [
-        "hello_secret_1",
-        "hello_secret_2",
-      ]
-    }
-  }
-}
-```
-
-Remove all vault secrets from association by adding the attribute `delete_all_secret_associations = true`:
-```terraform
-module "vault_secretsync" {
-  source  = "SPHTech-Platform/secret-sync/vault"
-  version = "~> 0.1.0"
-
-  name = "vault-ss"
-
-  associate_secrets = {
-    foo = {
-      mount       = "mount_foo"
-      secret_name = ["foo_secret"]
-    }
-    hello = {
-      mount       = "mount_hello"
-      secret_name = [
-        "hello_secret_1",
-        "hello_secret_2",
-      ]
-    }
-  }
-
-  delete_all_secret_associations = true
-}
-```
-
-Remove vault secret sync destination by adding `delete_sync_destination = true` (NOTE: all secret associations must be removed before this can be done i.e. `delete_all_secret_associations = true`):
-```terraform
-module "vault_secretsync" {
-  source  = "SPHTech-Platform/secret-sync/vault"
-  version = "~> 0.1.0"
-
-  name = "vault-ss"
-
-  associate_secrets = {
-    foo = {
-      mount       = "mount_foo"
-      secret_name = ["foo_secret"]
-    }
-    hello = {
-      mount       = "mount_hello"
-      secret_name = [
-        "hello_secret_1",
-        "hello_secret_2",
-      ]
-    }
-  }
-
-  delete_all_secret_associations = true
-  delete_sync_destination        = true
-```
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -121,17 +40,17 @@ module "vault_secretsync" {
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.2.2 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9.0 |
-| <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 3.23.0 |
+| <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 4.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.29.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.42.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | 3.2.2 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.6.0 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.10.0 |
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.23.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.11.1 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 4.1.0 |
 
 ## Modules
 
@@ -148,11 +67,8 @@ module "vault_secretsync" {
 | [null_resource.rotate_access_key](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_rotating.iam_user_secretsync_access_key](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/rotating) | resource |
-| [time_sleep.wait_for_destination_sync](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [vault_generic_endpoint.create_association_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
-| [vault_generic_endpoint.create_destination_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
-| [vault_generic_endpoint.remove_all_association_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
-| [vault_generic_endpoint.remove_some_association_sync](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/generic_endpoint) | resource |
+| [vault_secrets_sync_association.this](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/secrets_sync_association) | resource |
+| [vault_secrets_sync_aws_destination.aws](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/secrets_sync_aws_destination) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.vault_ent_secrets_manager_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
@@ -166,7 +82,7 @@ module "vault_secretsync" {
 | <a name="input_delete_sync_destination"></a> [delete\_sync\_destination](#input\_delete\_sync\_destination) | Delete the sync destination. Secret associations must be removed beforehand. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Prefix name for the destination | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | `"ap-southeast-1"` | no |
-| <a name="input_unassociate_secrets"></a> [unassociate\_secrets](#input\_unassociate\_secrets) | Map of vault kv to remove secret sync association | <pre>map(<br>    object({<br>      mount       = string<br>      secret_name = list(string)<br>    })<br>  )</pre> | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to set on the secrets managed at the destination | `map(string)` | `{}` | no |
 
 ## Outputs
 

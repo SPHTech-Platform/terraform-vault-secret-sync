@@ -13,14 +13,4 @@ locals {
       }
     ]
   ])
-
-  unassociate_secrets = flatten([
-    for app_name, secret in var.unassociate_secrets : [
-      for secret_name in secret.secret_name : {
-        app_name    = app_name
-        mount       = secret.mount
-        secret_name = secret_name
-      }
-    ]
-  ])
 }

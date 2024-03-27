@@ -32,13 +32,8 @@ variable "associate_secrets" {
   description = "Map of vault kv to create secret sync association"
 }
 
-variable "unassociate_secrets" {
-  type = map(
-    object({
-      mount       = string
-      secret_name = list(string)
-    })
-  )
-  default     = {}
-  description = "Map of vault kv to remove secret sync association"
+variable "tags" {
+  type = map(string)
+  default = {}
+  description = "Tags to set on the secrets managed at the destination"
 }
