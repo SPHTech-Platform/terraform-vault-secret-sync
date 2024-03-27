@@ -33,7 +33,7 @@ variable "associate_secrets" {
 }
 
 variable "tags" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "Tags to set on the secrets managed at the destination"
 }
