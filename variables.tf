@@ -1,15 +1,3 @@
-variable "delete_sync_destination" {
-  type        = bool
-  default     = false
-  description = "Delete the sync destination. Secret associations must be removed beforehand."
-}
-
-variable "delete_all_secret_associations" {
-  type        = bool
-  default     = false
-  description = "Delete the secret associations"
-}
-
 variable "name" {
   type        = string
   description = "Prefix name for the destination"
@@ -32,13 +20,8 @@ variable "associate_secrets" {
   description = "Map of vault kv to create secret sync association"
 }
 
-variable "unassociate_secrets" {
-  type = map(
-    object({
-      mount       = string
-      secret_name = list(string)
-    })
-  )
+variable "tags" {
+  type        = map(string)
   default     = {}
-  description = "Map of vault kv to remove secret sync association"
+  description = "Tags to set on the secrets managed at the destination"
 }
