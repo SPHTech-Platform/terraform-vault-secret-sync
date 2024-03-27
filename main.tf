@@ -5,7 +5,7 @@
 #######################################
 
 resource "vault_secrets_sync_aws_destination" "aws" {
-  name              = var.name
+  name              = local.destination_name
   access_key_id     = aws_iam_access_key.vault_secretsync.id
   secret_access_key = aws_iam_access_key.vault_secretsync.secret
   region            = data.aws_region.current.name

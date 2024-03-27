@@ -78,8 +78,6 @@ module "vault_secretsync" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_associate_secrets"></a> [associate\_secrets](#input\_associate\_secrets) | Map of vault kv to create secret sync association | <pre>map(<br>    object({<br>      mount       = string<br>      secret_name = list(string)<br>    })<br>  )</pre> | `{}` | no |
-| <a name="input_delete_all_secret_associations"></a> [delete\_all\_secret\_associations](#input\_delete\_all\_secret\_associations) | Delete the secret associations | `bool` | `false` | no |
-| <a name="input_delete_sync_destination"></a> [delete\_sync\_destination](#input\_delete\_sync\_destination) | Delete the sync destination. Secret associations must be removed beforehand. | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Prefix name for the destination | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | `"ap-southeast-1"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to set on the secrets managed at the destination | `map(string)` | `{}` | no |

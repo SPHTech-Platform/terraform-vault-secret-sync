@@ -1,15 +1,3 @@
-variable "delete_sync_destination" {
-  type        = bool
-  default     = false
-  description = "Delete the sync destination. Secret associations must be removed beforehand."
-}
-
-variable "delete_all_secret_associations" {
-  type        = bool
-  default     = false
-  description = "Delete the secret associations"
-}
-
 variable "name" {
   type        = string
   description = "Prefix name for the destination"
