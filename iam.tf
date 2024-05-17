@@ -32,9 +32,8 @@ resource "aws_iam_access_key" "vault_secretsync" {
   }
 }
 
-# Trigger access key rotation every 90 days
 resource "time_rotating" "iam_user_secretsync_access_key" {
-  rotation_days = 90
+  rotation_days = local.iam_key_rotation_days
 }
 
 resource "null_resource" "rotate_access_key" {
