@@ -1,27 +1,27 @@
-variable "delete_sync_destination" {
-  type        = bool
-  default     = false
-  description = "Delete the sync destination. Secret associations must be removed beforehand."
-}
-
-variable "delete_all_secret_associations" {
-  type        = bool
-  default     = false
-  description = "Delete the secret associations"
-}
-
 variable "name" {
-  type        = string
   description = "Prefix name for the destination"
+  type        = string
 }
 
-variable "region" {
+variable "aws_region" {
+  description = "AWS region"
   type        = string
   default     = "ap-southeast-1"
-  description = "AWS region"
 }
 
-variable "associate_secrets" {
+variable "aws_role_arn" {
+  description = "AWS IAM role to assume"
+  type        = string
+  default     = null
+}
+
+variable "aws_role_external_id" {
+  description = "Extra protection that must match trust policy granting access to the AWS IAM role ARN"
+  type        = string
+  default     = null
+}
+
+variable "secrets" {
   type = map(
     object({
       mount       = string
@@ -32,13 +32,14 @@ variable "associate_secrets" {
   description = "Map of vault kv to create secret sync association"
 }
 
-variable "unassociate_secrets" {
-  type = map(
-    object({
-      mount       = string
-      secret_name = list(string)
-    })
-  )
+variable "secret_name_template" {
+  description = "Template describing how to generate external secret names."
+  type        = string
+  default     = "vault_{{ .MountAccessor | lowercase }}_{{ .SecretPath | lowercase }}"
+}
+
+variable "custom_tags" {
+  description = "Custom tags to set on the secret managed at the destination"
+  type        = map(string)
   default     = {}
-  description = "Map of vault kv to remove secret sync association"
 }
