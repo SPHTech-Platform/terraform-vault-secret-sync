@@ -4,6 +4,19 @@
 #                                     #
 #######################################
 
+# Wait for the freshly-created IAM access key to propagate in AWS before Vault
+# uses it. New keys are eventually-consistent; without this, Vault initializes
+# the aws-sm store with a key AWS does not yet recognize and returns
+# `InvalidClientTokenId` (AWS STS 403 -> Vault 500). Re-created on key rotation
+# (trigger below) so the update path waits too.
+resource "time_sleep" "wait_for_key_propagation" {
+  create_duration = "30s"
+
+  triggers = {
+    access_key_id = aws_iam_access_key.vault_secretsync.id
+  }
+}
+
 # Create Vault -> AWS SM destination
 # Only need to create one destination per AWS region
 resource "vault_generic_endpoint" "create_destination_sync" {
@@ -20,6 +33,9 @@ resource "vault_generic_endpoint" "create_destination_sync" {
   disable_delete       = false
   disable_read         = true
   ignore_absent_fields = true
+
+  # Do not hand the key to Vault until it has propagated in AWS.
+  depends_on = [time_sleep.wait_for_key_propagation]
 }
 
 resource "time_sleep" "wait_for_destination_sync" {
