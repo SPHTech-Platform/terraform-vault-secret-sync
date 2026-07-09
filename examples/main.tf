@@ -7,9 +7,10 @@
 #   export VAULT_TOKEN=<token with write on sys/sync + the target namespace>
 #   AWS credentials via your usual mechanism (SSO / env / profile)
 #
-# Teardown (associations must go before the destination):
-#   in the module block set delete_all_secret_associations = true, apply;
-#   then also set delete_sync_destination = true, apply; then terraform destroy.
+# Teardown: terraform destroy. Associations are destroyed before the
+#   destination automatically (the association references the destination), so
+#   no delete flags are needed. Removing a secret from associate_secrets unsyncs
+#   just that one.
 
 data "aws_caller_identity" "current" {}
 

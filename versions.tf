@@ -7,7 +7,7 @@ terraform {
     }
     vault = {
       source  = "hashicorp/vault"
-      version = ">= 3.23.0"
+      version = ">= 3.25.0" # vault_secrets_sync_* typed resources (Vault 1.16+ Enterprise)
     }
     random = {
       source  = "hashicorp/random"
