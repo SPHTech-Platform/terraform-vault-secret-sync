@@ -20,6 +20,10 @@ resource "vault_secrets_sync_aws_destination" "this" {
   secret_access_key = aws_iam_access_key.vault_secretsync.secret
   region            = var.region
 
+  custom_tags          = var.custom_tags
+  secret_name_template = var.secret_name_template
+  granularity          = var.granularity
+
   depends_on = [time_sleep.wait_for_key_propagation]
 }
 
