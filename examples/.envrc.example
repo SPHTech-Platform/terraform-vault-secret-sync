@@ -3,7 +3,7 @@
 
 export VAULT_ADDR="https://<cluster>.private.vault.<cluster-uuid>.aws.hashicorp.cloud:8200"
 export VAULT_NAMESPACE="admin"        # or a child namespace, e.g. admin/team/app
-export AWS_REGION="ap-southeast-1"
 
 # export VAULT_TOKEN="..."            # prefer an in-shell export over a file
 # AWS credentials via SSO / profile:  aws sso login --profile <profile>
+# Region is set in the example locals (var.region), not from the environment.
