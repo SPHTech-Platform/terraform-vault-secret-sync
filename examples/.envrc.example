@@ -6,4 +6,3 @@ export VAULT_NAMESPACE="admin"        # or a child namespace, e.g. admin/team/ap
 
 # export VAULT_TOKEN="..."            # prefer an in-shell export over a file
 # AWS credentials via SSO / profile:  aws sso login --profile <profile>
-# Region is set in the example locals (var.region), not from the environment.
