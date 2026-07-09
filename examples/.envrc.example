@@ -1,0 +1,9 @@
+# Copy to .envrc (gitignored), fill in, then run `direnv allow`.
+# Prefer exporting VAULT_TOKEN in your shell over storing it in a file.
+
+export VAULT_ADDR="https://<cluster>.private.vault.<cluster-uuid>.aws.hashicorp.cloud:8200"
+export VAULT_NAMESPACE="admin"        # or a child namespace, e.g. admin/team/app
+export AWS_REGION="ap-southeast-1"
+
+# export VAULT_TOKEN="..."            # prefer an in-shell export over a file
+# AWS credentials via SSO / profile:  aws sso login --profile <profile>

@@ -1,35 +1,35 @@
 # End-to-end example: sync a Vault KV v2 secret to AWS Secrets Manager.
 #
 # Self-contained — creates a throwaway KV v2 mount + secret, then syncs it.
-# Edit the locals below, then `terraform init && terraform apply`.
 #
-# Auth (supply via environment, never hard-coded):
-#   export VAULT_TOKEN=<token with write on sys/sync + the target namespace>
-#   AWS credentials via your usual mechanism (SSO / env / profile)
+# Provider config is read from the environment, so no cluster-specific or
+# sensitive values live in this file. Set them before running — via a gitignored
+# .envrc with direnv (see .envrc.example), or plain exports:
+#   export VAULT_ADDR=...        # cluster endpoint, reachable from where you run
+#   export VAULT_NAMESPACE=...   # e.g. admin, or a child namespace
+#   export VAULT_TOKEN=...       # token with sys/sync write in that namespace
+#   export AWS_REGION=ap-southeast-1
+#   AWS credentials via SSO / profile / env
 #
-# Teardown: terraform destroy. Associations are destroyed before the
-#   destination automatically (the association references the destination), so
-#   no delete flags are needed. Removing a secret from associate_secrets unsyncs
-#   just that one.
+# Run:      terraform init && terraform apply
+# Teardown: terraform destroy   (associations are removed before the destination
+#           automatically — no delete flags)
 
 data "aws_caller_identity" "current" {}
 
 locals {
-  region          = "ap-southeast-1"
-  vault_address   = "https://<cluster>.private.vault.<cluster-uuid>.aws.hashicorp.cloud:8200"
-  vault_namespace = "admin"
-  kv_mount        = "example-secret-sync"
-  secret_name     = "example"
+  region      = "ap-southeast-1"
+  kv_mount    = "example-secret-sync"
+  secret_name = "example"
 }
 
+# Credentials from the environment (AWS_PROFILE / AWS_ACCESS_KEY_ID / ...).
 provider "aws" {
   region = local.region
 }
 
-provider "vault" {
-  address   = local.vault_address
-  namespace = local.vault_namespace
-}
+# Address, namespace, and token from VAULT_ADDR / VAULT_NAMESPACE / VAULT_TOKEN.
+provider "vault" {}
 
 resource "vault_mount" "this" {
   path        = local.kv_mount
