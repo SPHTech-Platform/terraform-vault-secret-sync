@@ -35,6 +35,7 @@ module "secret_sync" {
   name   = "example-secret-sync"
   region = local.region
 
+  # Map key ("example") is a free-form label, not used by the sync itself.
   associate_secrets = {
     example = {
       mount       = vault_mount.this.path

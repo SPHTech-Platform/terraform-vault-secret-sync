@@ -14,6 +14,8 @@ module "vault_secretsync" {
 
   name = "vault-ss"
 
+  # The map key (foo, hello) is a free-form label — any unique string. It only
+  # groups entries in your config; it does not affect the synced secret.
   associate_secrets = {
     foo = {
       mount       = "mount_foo"

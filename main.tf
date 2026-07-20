@@ -30,7 +30,7 @@ resource "vault_secrets_sync_aws_destination" "this" {
 # References the destination, so destroy removes associations first — teardown
 # needs no delete flags.
 resource "vault_secrets_sync_association" "this" {
-  for_each = { for secret in local.associate_secrets : jsonencode([secret.app_name, secret.mount, secret.secret_name]) => secret }
+  for_each = { for secret in local.associate_secrets : jsonencode([secret.mount, secret.secret_name]) => secret }
 
   name        = vault_secrets_sync_aws_destination.this.name
   type        = vault_secrets_sync_aws_destination.this.type

@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "associate_secrets" {
-  description = "Map of vault kv secrets to sync to the AWS Secrets Manager destination. Remove an entry (or run terraform destroy) to unsync it."
+  description = "Map of Vault KV secrets to sync to the AWS Secrets Manager destination. The map key is a free-form label (any unique string): it only groups entries in your config and does not affect the synced secret. Remove an entry (or run terraform destroy) to unsync it."
   type = map(
     object({
       mount       = string
