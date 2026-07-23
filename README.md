@@ -34,6 +34,33 @@ module "vault_secretsync" {
 
 **Unsync a secret:** remove it from `associate_secrets` (or drop a `secret_name` from the list) and apply — the corresponding association is destroyed, which unsyncs it. The destination and other associations are untouched.
 
+## Secret naming and IAM scope
+
+Vault — not Terraform — owns the lifecycle of the AWS Secrets Manager secret. Vault creates, tags, and **deletes** it using the IAM user this module provisions. The module therefore scopes that user's policy to the literal prefix of `secret_name_template`:
+
+| `secret_name_template` | IAM resource scope |
+| --- | --- |
+| unset (Vault default) | `secret:vault/*` |
+| `vault/bastion/{{ .SecretPath }}` | `secret:vault/bastion/*` |
+| `prefix-{{ .SecretPath }}` | `secret:prefix-*` |
+
+> **Changing `secret_name_template` after secrets are synced is hazardous.** On unsync Vault derives the external secret name from the *current* template, so secrets written under an older prefix fall outside the IAM policy. The delete is denied, the association can never be removed, and the destination then cannot be deleted:
+> `failed to delete destination: sync destination still contains associations`.
+
+To change the template safely, unsync first (remove the entries from `associate_secrets`, apply), then change it.
+
+If you are already stuck, add the old prefix so Vault can complete the unsync, apply, and then destroy normally:
+
+```terraform
+additional_secret_name_prefixes = ["/bastion/", "prefix-"]
+```
+
+As a last resort you can delete the destination out of band, which orphans any secrets already synced:
+
+```bash
+vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=true
+```
+
 **Tear everything down:** run `terraform destroy`. Terraform destroys the associations first (each references the destination), then the destination, then the IAM user/key — no flags, no multi-step apply.
 
 <!-- BEGIN_TF_DOCS -->

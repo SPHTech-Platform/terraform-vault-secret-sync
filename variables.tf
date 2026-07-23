@@ -27,9 +27,20 @@ variable "custom_tags" {
 }
 
 variable "secret_name_template" {
-  description = "Template for external secret names. Leave null to use Vault's default (includes the mount accessor)."
+  description = "Template for external secret names. Leave null to use Vault's default (includes the mount accessor). The literal prefix before the first template action scopes the sync user's IAM policy."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.secret_name_template == null || length(split("{{", var.secret_name_template)[0]) > 0
+    error_message = "secret_name_template must start with a literal prefix (e.g. \"vault/bastion/{{ .SecretPath }}\"), which is used to scope the IAM policy to those secrets."
+  }
+}
+
+variable "additional_secret_name_prefixes" {
+  description = "Extra AWS Secrets Manager name prefixes to allow in the sync user's IAM policy. Needed when secrets were synced under a previous secret_name_template: Vault deletes the external secret on unsync, so without the old prefix those associations cannot be removed and the destination cannot be deleted."
+  type        = list(string)
+  default     = []
 }
 
 variable "granularity" {
