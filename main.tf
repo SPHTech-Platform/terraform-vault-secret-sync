@@ -27,6 +27,14 @@ resource "vault_secrets_sync_aws_destination" "this" {
   depends_on = [time_sleep.wait_for_key_propagation]
 }
 
+# Check if the secret exists in Vault
+ephemeral "vault_kv_secret_v2" "check" {
+  for_each = { for secret in local.associate_secrets : jsonencode([secret.mount, secret.secret_name]) => secret }
+
+  mount = each.value.mount
+  name  = each.value.secret_name
+}
+
 # References the destination, so destroy removes associations first — teardown
 # needs no delete flags.
 resource "vault_secrets_sync_association" "this" {
