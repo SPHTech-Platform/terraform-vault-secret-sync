@@ -49,11 +49,14 @@ Vault — not Terraform — owns the lifecycle of the AWS Secrets Manager secret
 
 To change the template safely, unsync first (remove the entries from `associate_secrets`, apply), then change it.
 
-If you are already stuck, add the old prefix so Vault can complete the unsync, apply, and then destroy normally:
+If you are already stuck, add the literal prefix of the **previous** template so Vault can complete the unsync, apply, then destroy normally. For example, when secrets were first synced with `/bastion/{{ .SecretPath }}` and the template is now `vault/bastion/{{ .SecretPath }}`:
 
 ```terraform
-additional_secret_name_prefixes = ["/bastion/", "prefix-"]
+secret_name_template            = "vault/bastion/{{ .SecretPath }}" # current
+additional_secret_name_prefixes = ["/bastion/"]                     # literal prefix of the old template
 ```
+
+Each entry must match the literal prefix of the names actually stored in AWS Secrets Manager. Check them with `vault read sys/sync/destinations/aws-sm/<destination>/associations` and look at `external_name`.
 
 As a last resort you can delete the destination out of band, which orphans any secrets already synced:
 

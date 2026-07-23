@@ -32,8 +32,11 @@ variable "secret_name_template" {
   default     = null
 
   validation {
-    condition     = var.secret_name_template == null || length(split("{{", var.secret_name_template)[0]) > 0
-    error_message = "secret_name_template must start with a literal prefix (e.g. \"vault/bastion/{{ .SecretPath }}\"), which is used to scope the IAM policy to those secrets."
+    condition = var.secret_name_template == null || (
+      length(trimspace(split("{{", var.secret_name_template)[0])) > 0 &&
+      length(regexall("\\*", split("{{", var.secret_name_template)[0])) == 0
+    )
+    error_message = "secret_name_template must start with a literal, non-blank prefix that contains no \"*\" (e.g. \"vault/bastion/{{ .SecretPath }}\"). The prefix scopes the IAM policy, and the policy already appends a wildcard."
   }
 }
 
@@ -41,10 +44,23 @@ variable "additional_secret_name_prefixes" {
   description = "Extra AWS Secrets Manager name prefixes to allow in the sync user's IAM policy. Needed when secrets were synced under a previous secret_name_template: Vault deletes the external secret on unsync, so without the old prefix those associations cannot be removed and the destination cannot be deleted."
   type        = list(string)
   default     = []
+
+  validation {
+    condition = alltrue([
+      for prefix in var.additional_secret_name_prefixes :
+      length(trimspace(prefix)) > 0 && length(regexall("\\*", prefix)) == 0
+    ])
+    error_message = "Each additional_secret_name_prefixes entry must be non-blank and contain no \"*\". The IAM policy appends a wildcard, so a blank or wildcard entry would grant access to every secret in the account."
+  }
 }
 
 variable "granularity" {
   description = "Level of information synced as a distinct resource: secret-path or secret-key. Null uses Vault's default."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.granularity == null || contains(["secret-path", "secret-key"], coalesce(var.granularity, "secret-path"))
+    error_message = "granularity must be \"secret-path\" or \"secret-key\"."
+  }
 }
