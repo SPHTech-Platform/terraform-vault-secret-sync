@@ -1,34 +1,20 @@
-# End-to-end example: sync a Vault KV v2 secret to AWS Secrets Manager.
-#
-# Self-contained — creates a throwaway KV v2 mount + secret, then syncs it.
-# Edit the locals below, then `terraform init && terraform apply`.
-#
-# Auth (supply via environment, never hard-coded):
-#   export VAULT_TOKEN=<token with write on sys/sync + the target namespace>
-#   AWS credentials via your usual mechanism (SSO / env / profile)
-#
-# Teardown (associations must go before the destination):
-#   in the module block set delete_all_secret_associations = true, apply;
-#   then also set delete_sync_destination = true, apply; then terraform destroy.
+# Syncs a throwaway KV v2 secret to AWS Secrets Manager. Provider config comes
+# from the environment (VAULT_ADDR / VAULT_NAMESPACE / VAULT_TOKEN, AWS creds) —
+# see .envrc.example. Teardown: terraform destroy.
 
 data "aws_caller_identity" "current" {}
 
 locals {
-  region          = "ap-southeast-1"
-  vault_address   = "https://<cluster>.private.vault.<cluster-uuid>.aws.hashicorp.cloud:8200"
-  vault_namespace = "admin"
-  kv_mount        = "example-secret-sync"
-  secret_name     = "example"
+  region      = "ap-southeast-1"
+  kv_mount    = "example-secret-sync"
+  secret_name = "example"
 }
 
 provider "aws" {
   region = local.region
 }
 
-provider "vault" {
-  address   = local.vault_address
-  namespace = local.vault_namespace
-}
+provider "vault" {}
 
 resource "vault_mount" "this" {
   path        = local.kv_mount
@@ -49,6 +35,7 @@ module "secret_sync" {
   name   = "example-secret-sync"
   region = local.region
 
+  # Map key ("example") is a free-form label, not used by the sync itself.
   associate_secrets = {
     example = {
       mount       = vault_mount.this.path

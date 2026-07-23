@@ -18,7 +18,8 @@ data "aws_iam_policy_document" "vault_ent_secrets_manager_access" {
       "secretsmanager:UntagResource",
     ]
     resources = [
-      "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:vault/*"
+      for prefix in local.secret_name_prefixes :
+      "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:${prefix}*"
     ]
   }
 }
