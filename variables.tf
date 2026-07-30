@@ -14,7 +14,7 @@ variable "associate_secrets" {
   type = map(
     object({
       mount       = string
-      secret_name = list(string)
+      secret_name = set(string)
     })
   )
   default = {}
