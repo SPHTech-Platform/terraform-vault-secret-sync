@@ -28,11 +28,10 @@ resource "vault_secrets_sync_aws_destination" "this" {
 }
 
 # Check if the secret exists in Vault
-ephemeral "vault_kv_secret_v2" "check" {
+ephemeral "vault_generic_secret" "check" {
   for_each = { for secret in local.associate_secrets : jsonencode([secret.mount, secret.secret_name]) => secret }
 
-  mount = each.value.mount
-  name  = each.value.secret_name
+  path = "${each.value.mount}/data/${each.value.secret_name}"
 }
 
 # References the destination, so destroy removes associations first — teardown
