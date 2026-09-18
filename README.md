@@ -70,7 +70,7 @@ vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.2.2 |
@@ -81,7 +81,7 @@ vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.55.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | 3.3.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.9.0 |
@@ -91,14 +91,14 @@ vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_iam_group_secretsync"></a> [iam\_group\_secretsync](#module\_iam\_group\_secretsync) | terraform-aws-modules/iam/aws//modules/iam-group-with-policies | ~> 5.32.0 |
 | <a name="module_iam_user_secretsync"></a> [iam\_user\_secretsync](#module\_iam\_user\_secretsync) | terraform-aws-modules/iam/aws//modules/iam-user | ~> 5.32.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [aws_iam_access_key.vault_secretsync](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
 | [null_resource.rotate_access_key](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
@@ -113,9 +113,9 @@ vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_additional_secret_name_prefixes"></a> [additional\_secret\_name\_prefixes](#input\_additional\_secret\_name\_prefixes) | Extra AWS Secrets Manager name prefixes to allow in the sync user's IAM policy. Needed when secrets were synced under a previous secret\_name\_template: Vault deletes the external secret on unsync, so without the old prefix those associations cannot be removed and the destination cannot be deleted. | `list(string)` | `[]` | no |
-| <a name="input_associate_secrets"></a> [associate\_secrets](#input\_associate\_secrets) | Map of Vault KV secrets to sync to the AWS Secrets Manager destination. The map key is a free-form label (any unique string): it only groups entries in your config and does not affect the synced secret. Remove an entry (or run terraform destroy) to unsync it. | <pre>map(<br>    object({<br>      mount       = string<br>      secret_name = set(string)<br>    })<br>  )</pre> | `{}` | no |
+| <a name="input_associate_secrets"></a> [associate\_secrets](#input\_associate\_secrets) | Map of Vault KV secrets to sync to the AWS Secrets Manager destination. The map key is a free-form label (any unique string): it only groups entries in your config and does not affect the synced secret. Remove an entry (or run terraform destroy) to unsync it. | <pre>map(<br/>    object({<br/>      mount       = string<br/>      secret_name = set(string)<br/>    })<br/>  )</pre> | `{}` | no |
 | <a name="input_custom_tags"></a> [custom\_tags](#input\_custom\_tags) | Custom tags to set on the secrets managed at the destination. | `map(string)` | `{}` | no |
 | <a name="input_granularity"></a> [granularity](#input\_granularity) | Level of information synced as a distinct resource: secret-path or secret-key. Null uses Vault's default. | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Prefix name for the destination | `string` | n/a | yes |
@@ -125,6 +125,6 @@ vault delete sys/sync/destinations/aws-sm/<destination> purge=true force_delete=
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_destination_name"></a> [destination\_name](#output\_destination\_name) | Name of the AWS Secrets Manager sync destination. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
